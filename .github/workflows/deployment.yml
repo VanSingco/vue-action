@@ -5,11 +5,12 @@ on:
     branches:
       - main
 env:
-  BASE_URL: https://vansingco.github.io
+  BASE_URL: https://tallie.cloud
 jobs:
   build:
-    env:
-      BASE_URL: https://tallie.cloud
+    environment: main
+    # env: //for manual adding environment variables
+    #   BASE_URL: https://tallie.cloud
     runs-on: ubuntu-latest
     outputs:
       script-file: ${{steps.publish-js.outputs.script-file}}
