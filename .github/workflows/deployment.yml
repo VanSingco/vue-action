@@ -1,58 +1,37 @@
 name: Peiso Deployment
 on:
-  workflow_dispatch:
   push:
     branches:
       - main
-env:
-  BASE_URL: https://tallie.cloud
 jobs:
-  build:
-    environment: main
-    # env: //for manual adding environment variables
-    #   BASE_URL: https://tallie.cloud
+  deploy:
     runs-on: ubuntu-latest
-    outputs:
-      script-file: ${{steps.publish-js.outputs.script-file}}
     steps:
-      - name: Get code
-        uses: actions/checkout@v3
+      - name: Checkout Repository
+        uses: actions/checkout@v4
       - name: Install Node
         uses: actions/setup-node@v4
         with:
           node-version: 18.8.0
-      - name: Cache Dependencies
-        uses: actions/cache@v4
+      - name: Install Dependencies and Build
+        run: |
+          npm ci
+          npm run build
+      - name: Copy Files to EC2
+        uses: appleboy/scp-action@master
         with:
-          path: ~/.npm
-          key: node-modules-${{ hashFiles('**/package-lock.json') }}
-      - name: Install Dependencies
-        run: npm ci
-      - name: Run Build
-        run: npm run build
-      - name: Publish javascript filename
-        id: publish-js
-        run: find dist/assets/*.js -type f -execdir echo 'script-file={}' >> $GITHUB_OUTPUT ';'
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v4
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_PRIVATE_KEY }}
+          source: "dist/"
+          target: "/temp"
+
+      - name: SSH into EC2 and Update Nginx
+        uses: appleboy/ssh-action@master
         with:
-          name: dist-file
-          path: dist
-      - name: Output Env
-        run: echo 'BASE_URL ${{env.BASE_URL}}'
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Get build artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: dist-file
-      - name: Output content job
-        run: echo "${{needs.build.outputs.script-file}}"
-      - name: Deploy
-        run: echo "Deploying..."
-
-
-
-
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_PRIVATE_KEY }}
+          script: |
+            sudo mv /temp/dist /usr/share/nginx/html
+            sudo service nginx restart
