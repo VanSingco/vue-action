@@ -25,7 +25,7 @@ jobs:
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           port: ${{ secrets.EC2_PORT }}
           source: "dist/"
-          target: "/usr/share/nginx/html"
+          target: "/temp"
 
       - name: SSH into EC2 and Update Nginx
         uses: appleboy/ssh-action@v1.0.3
@@ -35,4 +35,5 @@ jobs:
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           port: ${{ secrets.EC2_PORT }}
           script: |
+            sudo mv /tmp/dist /var/www/html
             sudo service nginx restart
