@@ -1,4 +1,4 @@
 
 export default  {
-    NAME: 'Vanske',
+    NAME: 'Vanske Sandbox',
 }
