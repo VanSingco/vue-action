@@ -27,6 +27,7 @@ jobs:
 
 
   deploy:
+    needs: merge_branch
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
