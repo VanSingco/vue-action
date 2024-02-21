@@ -1,6 +1,7 @@
 <script setup>
 import HelloWorld from './components/HelloWorld.vue'
 import TheWelcome from './components/TheWelcome.vue'
+import prodEnv from '../prod.env'
 </script>
 
 <template>
@@ -8,7 +9,7 @@ import TheWelcome from './components/TheWelcome.vue'
     <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
 
     <div class="wrapper">
-      <h1>Hello World Vanske</h1>
+      <h1>Hello World {{ prodEnv.NAME }} </h1>
     </div>
   </header>
 

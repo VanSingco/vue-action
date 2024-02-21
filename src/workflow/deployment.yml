@@ -1,0 +1,40 @@
+name: Peiso Deployment
+on:
+  workflow_dispatch:
+jobs:
+  merge_branch:
+    runs-on: ubuntu-latest
+    steps:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+      - name: Install Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18.8.0
+      - name: Install Dependencies and Build
+        run: |
+          npm ci
+          npm run build
+      - name: Copy Files to EC2
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_PRIVATE_KEY }}
+          port: ${{ secrets.EC2_PORT }}
+          source: "dist/"
+          target: "/usr/share/nginx/html"
+
+      - name: SSH into EC2 and Update Nginx
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_PRIVATE_KEY }}
+          port: ${{ secrets.EC2_PORT }}
+          script: |
+            sudo service nginx restart
