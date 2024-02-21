@@ -14,9 +14,9 @@ jobs:
           git checkout sandbox
           git pull origin sandbox
           git merge main --no-commit --no-ff
-          git reset HEAD prod.env.js  # Unstage the specific files
-          git checkout -- prod.env.js  # Discard changes to the specific files
-          git commit -m "Merge main into sandbox ignoring specific files and folders"
+          git checkout -- prod.env.js
+          git reset HEAD prod.env.js
+          git commit -m "Merge main into sandbox ignoring prod.env.js"
       
       - name: Push changes to other branch
         uses: ad-m/github-push-action@master
