@@ -15,7 +15,8 @@ jobs:
           git config --global user.name "vansingco"
           git fetch origin sandbox
           git checkout sandbox
-          git pull origin main --no-ff --allow-unrelated-histories
+          git pull origin sandbox 
+          git merge main --no-commit --no-ff --allow-unrelated-histories
           git checkout -- prod.env.js
           git reset HEAD prod.env.js
           git commit -m "Merge main into sandbox ignoring prod.env.js"
