@@ -9,7 +9,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          
+
       - name: Merge main into sandox branch
         run: |
           git config --global user.email "vanske19@gmail.com"
@@ -21,7 +21,6 @@ jobs:
           git commit -m "Merge main to sandbox excluding prod.env.js"
           git push origin sandbox
       
-
   deploy:
     needs: merge_branch
     runs-on: ubuntu-latest
