@@ -9,7 +9,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          ref: sandox
+          ref: sandbox
 
       - name: Merge main into sandox branch
         run: |
