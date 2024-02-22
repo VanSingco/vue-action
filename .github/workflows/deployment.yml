@@ -18,7 +18,7 @@ jobs:
           git config --global user.name "vansingco"
           git fetch origin sandbox
           git checkout sandbox
-          git merge main --no-edit --allow-unrelated-histories
+          git merge -s recursive -X theirs main --allow-unrelated-histories
           git push origin sandbox
       
 
