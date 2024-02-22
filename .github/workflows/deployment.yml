@@ -16,8 +16,8 @@ jobs:
           git config --global user.name "vansingco"
           git fetch origin sandbox
           git checkout sandbox
-          git merge -X ours origin/main --no-commit --no-ff --allow-unrelated-histories
-          git checkout --ours prod.env.js
+          git merge -s recursive -X ours main -Xignore-space-change --no-commit --no-ff --allow-unrelated-histories
+          git checkout main -- prod.env.js
           git add .
           git commit -m "Merge main to sandbox excluding prod.env.js"
           
