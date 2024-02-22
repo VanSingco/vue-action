@@ -9,16 +9,15 @@ jobs:
         uses: actions/checkout@v2
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+          ref: sandox
 
       - name: Merge main into sandox branch
         run: |
           git config --global user.email "vanske19@gmail.com"
           git config --global user.name "vansingco"
-          git fetch origin sandbox
-          git checkout sandbox
-          git merge -s recursive -X ours main -Xignore-space-change --no-commit --no-ff --allow-unrelated-histories
-          git checkout main -- prod.env.js
-          git add .
+          git fetch origin main
+          git merge origin/main --no-commit --no-ff --allow-unrelated-histories
+          git checkout -- prod.env.js
           git commit -m "Merge main to sandbox excluding prod.env.js"
           
       - name: Push changes to sandbox
