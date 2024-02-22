@@ -2,34 +2,7 @@ name: Peiso Deployment
 on:
   workflow_dispatch:
 jobs:
-  merge_branch:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout main branch
-        uses: actions/checkout@v2
-        with:
-          ref: main
-      - name: Merge main into sandox branch
-        run: |
-          git config --global user.email "vanske19@gmail.com"
-          git config --global user.name "vansingco"
-          git fetch origin sandbox
-          git checkout sandbox
-          git pull origin main --no-ff --allow-unrelated-histories
-          git checkout -- prod.env.js
-          git reset HEAD prod.env.js
-          git commit -m "Merge main into sandbox ignoring prod.env.js"
-      
-      - name: Push changes to other branch
-        uses: ad-m/github-push-action@master
-        with:
-          branch: sandbox
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-
-
-
   deploy:
-    needs: merge_branch
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
