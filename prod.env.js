@@ -1,4 +1,4 @@
 
 export default  {
-    NAME: 'Vanske Test 123',
+    NAME: 'Vanske',
 }

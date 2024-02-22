@@ -1,8 +1,29 @@
+
+
 name: Peiso Deployment
 on:
   workflow_dispatch:
 jobs:
+  merge_branch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout main branch
+        uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+        
+      - name: Merge main into sandox branch
+        run: |
+          git config --global user.email "vanske19@gmail.com"
+          git config --global user.name "vansingco"
+          git fetch origin sandbox
+          git checkout sandbox
+          git merge -s recursive -X theirs main --allow-unrelated-histories
+          git push origin sandbox
+      
+
   deploy:
+    needs: merge_branch
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
