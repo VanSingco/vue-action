@@ -19,6 +19,7 @@ jobs:
           git fetch origin sandbox
           git checkout sandbox
           git merge -s recursive -X theirs main --allow-unrelated-histories
+          git checkout --ours prod.env.js
           git push origin sandbox
       
 
