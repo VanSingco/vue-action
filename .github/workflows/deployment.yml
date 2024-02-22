@@ -18,8 +18,20 @@ jobs:
           git config --global user.name "vansingco"
           git fetch origin sandbox
           git checkout sandbox
+
+          mkdir temp
+          cp prod.env.js temp/prod.env.js
+
           git merge -s recursive -X theirs main --allow-unrelated-histories
-          git checkout --ours prod.env.js
+
+          cp temp/prod.env.js prod.env.js
+          rm -r temp
+
+
+      - name: Commit and push changes to sandbox branch
+        run: |
+          git add .
+          git commit -m "Merge changes from main branch"
           git push origin sandbox
       
 
